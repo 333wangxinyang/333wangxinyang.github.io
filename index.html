@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
-		<meta charset="UTF-8">
-		<title>111</title>
+		<meta charset="utf-8" />
+		<title>贪吃蛇</title>
 		<style type="text/css">
 			* {
 				padding: 0;
@@ -47,34 +48,39 @@
 			}
 		</style>
 	</head>
+
 	<body>
 		<div id="wrap">
 			<h3>贪吃蛇</h3>
 			<p id="score">0</p>
 			<div id="content"></div>
 		</div>
-		<script type="text/javascript">
-			var oCon = document.getElementById("content");
-			var arr = [];
-			for (var i =0;i<30;i++) {
-				var arr1 = [];
-				for (var j = 0;j<30;j++) {
-					var newDiv = document.createElement("div");
-					oCon.appendChild(newDiv);
-					arr1.push(newDiv);
-				}
-				arr.push(arr1);
-			}
+	</body>
+
+</html>
+<script type="text/javascript">
+	var oCon = document.getElementById("content");
+	var arr = [];
+	for(var i = 0; i < 30; i++) {
+		var arr1 = [];
+		for(var j = 0; j < 30; j++) {
+			var newDiv = document.createElement("div");
+			oCon.appendChild(newDiv);
+			arr1.push(newDiv);
+		}
+		arr.push(arr1);
+	}
+	
 	//i为行，j为列
 	var i = 0;
-	var j =0;
-	arr[i][j].classNames = 'active';
-	arr[i][j+1].classNames = 'active';		
-	arr[i][j+2].classNames = 'active';	
-	//
-	var  snake =[arr[i][j],arr[i][j+1],arr[i][j+2]];
-	var direction = "right"
-	//键盘事件		
+	var j = 0;
+	arr[i][j].className = "active";
+	arr[i][j + 1].className = "active";
+	arr[i][j + 2].className = "active";
+	//蛇初始长度为3
+	var snake = [arr[i][j], arr[i][j + 1], arr[i][j + 2]];
+	var direction = "right";
+	//设置键盘事件
 	//left-37 top-38 right-39 down-40
 	document.onkeydown = function(e) {
 		var even = e|| event;
@@ -90,7 +96,7 @@
 		if(even.keyCode == 40 && direction != "up") {
 			direction = "down";
 		}
-	}	
+	}
 	
 	var moveTimer;
 	moveTimer = setInterval(function() {
@@ -102,9 +108,8 @@
 			return;
 	}	
 		moveAndEatFood();
-	}, 200);
+	}, 100);
 	
-	//食物生成
 	//食物生成
 	function ranNum(x, y) {
 		return Math.floor(Math.random() * (y - x + 1) + x);
@@ -120,8 +125,9 @@
 		arr[x][y].className = "food";
 	}
 	food();
-	//控制蛇的行走 和加分
-//	var count=0;
+	
+	//控制蛇的行走
+	var count=0;
 	function moveAndEatFood() {
 		//如果蛇头坐标与食物坐标完全重合，代表吃到食物
 		if(arr[i][j + 2].className == "food") {
@@ -129,8 +135,8 @@
 			snake.push(arr[i][j + 2]);
 			arr[i][j + 2].className = "active";
 			food();
-//			count++;
-//			score.innerHTML=count;
+			count++;
+			score.innerHTML=count;
 		} else {
 			//如果没有吃到食物，数组长度不变，不断添加和删除元素
 			arr[i][j + 2].className = "active";
@@ -140,6 +146,7 @@
 			deleteSnake.className = "";
 		}
 	}
+	
 	function snakeDie() {
 		//蛇头碰壁   i代表上下界，j代表左右边界
 		if(i < 0 || i >29 || j < -2 || j > 27) {
@@ -154,6 +161,4 @@
 			return 1;
 		}
 	}
-		</script>
-	</body>
-</html>
+</script>
