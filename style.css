@@ -1,0 +1,53 @@
+* {
+    margin: 0;
+    padding: 0;
+    /*不让用户选择该区域*/
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+ul, li {
+    list-style: none;
+}
+body {
+    position: relative;
+}
+#map {
+    display: block;
+}
+#loading {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+#currentScore {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+#menu {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(182, 188, 189);
+    width: 160px;
+    height: 160px;
+    border:1px solid black;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 40px;
+    display: none;
+}
+#end_score {
+    line-height: 80px;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+#restart {
+    cursor: pointer;
+    
+}
