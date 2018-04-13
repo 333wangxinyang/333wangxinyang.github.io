@@ -1,165 +1,32 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<meta charset="utf-8" />
-		<title>贪吃蛇</title>
-		<style type="text/css">
-			* {
-				padding: 0;
-				margin: 0;
-			}
-			
-			#wrap {
-				width: 600px;
-				margin: 100px auto 0;
-				text-align: center;
-				border: 1px solid red;
-			}
-			
-			#wrap>h3 {
-				font-size: 25px;
-			}
-			
-			#score {
-				font-size: 20px;
-			}
-			
-			#content {
-				width: 600px;
-				height: 600px;
-				border: 1px solid black;
-			}
-			
-			#content div {
-				width: 19px;
-				height: 19px;
-				border: 1px solid black;
-				border-width: 0 1px 1px 0;
-				float: left;
-			}
-			
-			.active {
-				background: red;
-			}
-			
-			.food {
-				background: greenyellow;
-			}
-		</style>
-	</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <title>微信打飞机</title>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+    </head>
 
-	<body>
-		<div id="wrap">
-			<h3>贪吃蛇</h3>
-			<p id="score">0</p>
-			<div id="content"></div>
-		</div>
-		<a href="dfj.html">微信打飞机</a>
-	</body>
-
+    <body>
+        <!--游戏区域-->
+        <canvas id="map">您的...</canvas>
+        <!--加载项-->
+        <!--#表示id .表示class +表示同级 >表示父子级 $从1递增 *连续出现多个元素-->
+        <!--div#loading>img+p{游戏加载中}-->
+        <!--ul>li{这是第$个li}*10-->
+        <div id="loading">
+            <img src="loading.gif" alt="" />
+            <p>游戏加载中</p>
+        </div>
+        <!--当前分数(左上角)-->
+        <p id="currentScore">分数:<span>0</span></p>
+        <!--结束菜单-->
+        <ul id="menu">
+            <li>飞机大战分数</li>
+            <li id="end_score">0</li>
+            <li id="restart">重新开始</li>
+        </ul>
+        <script src="hitFly.js" type="text/javascript" charset="utf-8"></script>
+    </body>
 </html>
-<script type="text/javascript">
-	var oCon = document.getElementById("content");
-	var arr = [];
-	for(var i = 0; i < 30; i++) {
-		var arr1 = [];
-		for(var j = 0; j < 30; j++) {
-			var newDiv = document.createElement("div");
-			oCon.appendChild(newDiv);
-			arr1.push(newDiv);
-		}
-		arr.push(arr1);
-	}
-	
-	//i为行，j为列
-	var i = 0;
-	var j = 0;
-	arr[i][j].className = "active";
-	arr[i][j + 1].className = "active";
-	arr[i][j + 2].className = "active";
-	//蛇初始长度为3
-	var snake = [arr[i][j], arr[i][j + 1], arr[i][j + 2]];
-	var direction = "right";
-	//设置键盘事件
-	//left-37 top-38 right-39 down-40
-	document.onkeydown = function(e) {
-		var even = e|| event;
-		if(even.keyCode == 37 && direction != "right") {
-			direction = "left";
-		}
-		if(even.keyCode == 38 && direction != "down") {
-			direction = "up";
-		}
-		if(even.keyCode == 39 && direction != "left") {
-			direction = "right";
-		}
-		if(even.keyCode == 40 && direction != "up") {
-			direction = "down";
-		}
-	}
-	
-	var moveTimer;
-	moveTimer = setInterval(function() {
-		if(direction == "right") j++;
-		if(direction == "left") j--;
-		if(direction == "up") i--;
-		if(direction == "down") i++;
-        if(snakeDie() == 1) {
-			return;
-	}	
-		moveAndEatFood();
-	}, 100);
-	
-	//食物生成
-	function ranNum(x, y) {
-		return Math.floor(Math.random() * (y - x + 1) + x);
-	}
-	function food() {
-		var x = ranNum(0, 29);
-		var y = ranNum(0, 29);
-		//如果食物位置出现在自身，重新随机位置
-		while(arr[x][y].className == "active") {
-			x = ranNum(0, 29);
-			y = ranNum(0, 29);
-		}		
-		arr[x][y].className = "food";
-	}
-	food();
-	
-	//控制蛇的行走
-	var count=0;
-	function moveAndEatFood() {
-		//如果蛇头坐标与食物坐标完全重合，代表吃到食物
-		if(arr[i][j + 2].className == "food") {
-			//push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
-			snake.push(arr[i][j + 2]);
-			arr[i][j + 2].className = "active";
-			food();
-			count++;
-			score.innerHTML=count;
-		} else {
-			//如果没有吃到食物，数组长度不变，不断添加和删除元素
-			arr[i][j + 2].className = "active";
-			snake.push(arr[i][j + 2]);
-			//shift() 方法用于把数组的第一个元素从其中删除，并返回第一个元素的值。
-			var deleteSnake = snake.shift();
-			deleteSnake.className = "";
-		}
-	}
-	
-	function snakeDie() {
-		//蛇头碰壁   i代表上下界，j代表左右边界
-		if(i < 0 || i >29 || j < -2 || j > 27) {
-			alert("GameOver");
-			clearInterval(moveTimer);
-			return 1;
-		}
-		//蛇的自杀   indexOf() 方法可返回某个指定的字符串值在字符串中首次出现的位置。如果要检索的字符串值没有出现，则该方法返回 -1。
-		if(snake.indexOf(arr[i][j + 2]) != -1) {
-			alert("GameOver");
-			clearInterval(moveTimer);
-			return 1;
-		}
-	}
-</script>
